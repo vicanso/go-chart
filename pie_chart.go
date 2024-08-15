@@ -234,23 +234,35 @@ func (p *pieChart) render(result *defaultRenderResult, seriesList SeriesList) (B
 			continue
 		}
 		if currentQuadrant != s.quadrant {
-			currentQuadrant = s.quadrant
 			if s.quadrant == 1 {
 				minY = cy * 2
 				maxY = 0
 				prevY = cy * 2
 			}
 			if s.quadrant == 2 {
-				prevY = minY
+				if currentQuadrant != 3 {
+					prevY = s.lineEndY
+				} else {
+					prevY = minY
+				}
 			}
 			if s.quadrant == 3 {
-				minY = cy * 2
-				maxY = 0
-				prevY = 0
+				if currentQuadrant != 4 {
+					prevY = s.lineEndY
+				} else {
+					minY = cy * 2
+					maxY = 0
+					prevY = 0
+				}
 			}
 			if s.quadrant == 4 {
-				prevY = maxY
+				if currentQuadrant != 1 {
+					prevY = s.lineEndY
+				} else {
+					prevY = maxY
+				}
 			}
+			currentQuadrant = s.quadrant
 		}
 		prevY = s.calculateY(prevY)
 		if prevY > maxY {
